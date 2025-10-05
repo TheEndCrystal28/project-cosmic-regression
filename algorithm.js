@@ -1,10 +1,8 @@
-let skibidi = {
-    values: null
-};
+let trainingValues;
 let biases = [];
 let weights = [];
 let threshold = 0.5;
-for (let i = 0; i < values.x[0].length; i++) {
+for (let i = 0; i < trainingValues.x[0].length; i++) {
     weights.push(1); // initialize to 1 to avoid division by 0
     biases.push(0);
 }
@@ -30,19 +28,19 @@ const lossCalculation = (xVals, yVals) => {
 const updateRegression = (xVals, yVals) => {
     let dW = [];
     let dB = [];
-    for (var i = 0; i < values.x[0].length; i++) {
+    for (var i = 0; i < trainingValues.x[0].length; i++) {
        dW.push(0);
        dB.push(0);
     }
     for (let i = 0; i < xVals.length; i++) {
         let error = gaussian(xVals[i]) - yVals[i];
-        for (let j = 0; j < values.x[0].length; j++) {
+        for (let j = 0; j < trainingValues.x[0].length; j++) {
             dB[j] += error * (xVals[i][j] - biases[j]) / (weights[j] * weights[j]);
             dW[j] += error * Math.pow(xVals[i][j] - biases[j], 2) / (weights[j] * weights[j] * weights[j]);
         }
     }
 
-    for (let j = 0; j < values.x[0].length; j++) {
+    for (let j = 0; j < trainingValues.x[0].length; j++) {
         dB[j] /= xVals.length;
         dW[j] /= xVals.length;
     }
@@ -73,24 +71,24 @@ const classification = (xVals, yVals, t = threshold) => {
 
 const train = (epochs, lr) => {
     for (let epoch = 0; epoch < epochs; epoch++) {
-        let grads = updateRegression(values.x, values.y);
-        for (let j = 0; j < values.x[0].length; j++) {
+        let grads = updateRegression(trainingValues.x, trainingValues.y);
+        for (let j = 0; j < trainingValues.x[0].length; j++) {
             biases[j] -= lr * grads.dB[j];
             weights[j] -= lr * grads.dW[j];
         }
 
         if (epoch % (epochs/10) === 0) {
-            console.log("Epoch " + epoch + ": Loss=" + lossCalculation(values.x, values.y).toFixed(4) + " Biases=" + biases.map(v => v.toFixed(2)) + " Weights=" + weights.map(v => v.toFixed(2)));
+            console.log("Epoch " + epoch + ": Loss=" + lossCalculation(trainingValues.x, trainingValues.y).toFixed(4) + " Biases=" + biases.map(v => v.toFixed(2)) + " Weights=" + weights.map(v => v.toFixed(2)));
         }
     }
 }
 const debug = () =>{
     train(1000,0.05);
     console.log("Prediction:" + catagorize([2,3,1]));
-    console.log("TPR: " + classification(values.x, values.y).TPR);
-    console.log("Precision: " + classification(values.x, values.y).precision);
-    console.log("FPR: " + classification(values.x, values.y).FPR);
-    console.log("Accuracy: " + classification(values.x, values.y).accuracy);
+    console.log("TPR: " + classification(trainingValues.x, trainingValues.y).TPR);
+    console.log("Precision: " + classification(trainingValues.x, trainingValues.y).precision);
+    console.log("FPR: " + classification(trainingValues.x, trainingValues.y).FPR);
+    console.log("Accuracy: " + classification(trainingValues.x, trainingValues.y).accuracy);
 }
 
 
