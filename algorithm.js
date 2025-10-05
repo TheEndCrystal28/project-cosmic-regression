@@ -1,25 +1,25 @@
-export let skibidi = {
+let skibidi = {
     values: null
 };
-export let biases = [];
-export let weights = [];
-export let threshold = 0.5;
+let biases = [];
+let weights = [];
+let threshold = 0.5;
 for (let i = 0; i < values.x[0].length; i++) {
     weights.push(1); // initialize to 1 to avoid division by 0
     biases.push(0);
 }
 
 
-export const gaussian = (x) => {
+const gaussian = (x) => {
     let sum = 0;
     for (let i = 0; i < x.length; i++) {
         sum += Math.pow(x[i] - biases[i], 2) / (2 * weights[i] * weights[i]);
     }
     return Math.exp(-sum);
 }
-export const catagorize = (x,t = threshold) => (gaussian(x) >= t ? 1 : 0);
+const catagorize = (x,t = threshold) => (gaussian(x) >= t ? 1 : 0);
 
-export const lossCalculation = (xVals, yVals) => {
+const lossCalculation = (xVals, yVals) => {
     let losses = 0;
     for (let i = 0; i < xVals.length; i++) {
         losses += -(yVals[i] * Math.log(gaussian(xVals[i]) + 1e-12) + (1 - yVals[i]) * Math.log(1 - gaussian(xVals[i]) + 1e-12));
@@ -27,7 +27,7 @@ export const lossCalculation = (xVals, yVals) => {
     return losses / xVals.length;
 }
 
-export const updateRegression = (xVals, yVals) => {
+const updateRegression = (xVals, yVals) => {
     let dW = [];
     let dB = [];
     for (var i = 0; i < values.x[0].length; i++) {
@@ -49,7 +49,7 @@ export const updateRegression = (xVals, yVals) => {
 
     return { dB: dB, dW: dW };
 }
-export const classification = (xVals, yVals, t = threshold) => {
+const classification = (xVals, yVals, t = threshold) => {
     let TP = 0, TN = 0, FP = 0, FN = 0;
 
     for (let i = 0; i < xVals.length; i++) {
@@ -71,7 +71,7 @@ export const classification = (xVals, yVals, t = threshold) => {
     return {TPR: tpr, precision, FPR: fpr, accuracy: acc};
 };
 
-export const train = (epochs, lr) => {
+const train = (epochs, lr) => {
     for (let epoch = 0; epoch < epochs; epoch++) {
         let grads = updateRegression(values.x, values.y);
         for (let j = 0; j < values.x[0].length; j++) {
@@ -84,7 +84,7 @@ export const train = (epochs, lr) => {
         }
     }
 }
-export const debug = () =>{
+const debug = () =>{
     train(1000,0.05);
     console.log("Prediction:" + catagorize([2,3,1]));
     console.log("TPR: " + classification(values.x, values.y).TPR);
