@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Cosmic Regression</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.5/p5.min.js"></script>
+    <script src="script.js"></script>
+    <script src="readCSV.js"></script>
 </head>
 <body>
     <input type="file" id="csvFile">
-    <script src="algorithm.js"></script>
-    <script src="readCSV.js"></script>
     <script>
         document.getElementById('csvFile').addEventListener('change', function(e) {
             let file = e.target.files[0];
