@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Cosmic Regression</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.5/p5.min.js"></script>
+</head>
+<body>
+    <input type="file" id="csvFile">
+    <script type="module">
+        import * as AI from './algorithm.js';
+    	let values;
+        function readCSVToXY(file, xCols, yCol, callback) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let data = e.target.result;
+                let lines = data.trim().split(/\r?\n/);
+                let headers = lines[0].split(',');
+
+                let xIndices = [];
+                for (let i = 0; i < xCols.length; i++) {
+                    xIndices.push(headers.indexOf(xCols[i]));
+                }
+                let yIndex = headers.indexOf(yCol);
+
+                let x = [];
+                let y = [];
+
+                for (let j = 1; j < lines.length; j++) {
+                    let values = lines[j].split(',');
+                    let xRow = [];
+                    for (let k = 0; k < xIndices.length; k++) {
+                        xRow.push(values[xIndices[k]]);
+                    }
+                    x.push(xRow);
+                    y.push(values[yIndex]);
+                }
+
+                callback({ x: x, y: y });
+            };
+
+            reader.readAsText(file);
+        }
+        document.getElementById('csvFile').addEventListener('change', function(e) {
+            let file = e.target.files[0];
+            if (!file) return;
+
+            // specify which columns to use
+            let xCols = ['koi_period','koi_time0bk','koi_impact','koi_duration','koi_depth','koi_prad'];
+            let yCol = 'koi_disposition';
+
+            readCSVToXY(file, xCols, yCol, function(result) {
+                console.log(result);
+                values = result;
+            });
+        }, false);
+        AI.skibidi.values = values;
+        AI.debug();
+
+    </script>
+</body>
+</html>
