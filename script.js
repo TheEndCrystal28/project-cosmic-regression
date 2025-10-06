@@ -1,4 +1,4 @@
-let values;
+let values = {x:[[]],y:[]};
 let biases = [];
 let weights = [];
 let threshold = 0.5;
