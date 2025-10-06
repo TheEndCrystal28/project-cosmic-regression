@@ -191,6 +191,7 @@
 
             reader.readAsText(file);
         }
+        document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('csvFile').addEventListener('change', function(e) {
             let file = e.target.files[0];
             if (!file) return;
@@ -220,7 +221,7 @@
                 debug();
             });
         }, false);
-        
+        });
 
 
 
